@@ -5,12 +5,28 @@ require 'spec_helper'
 RSpec.describe TransitionThrough do
   let(:counter) { Counter.new }
 
+  context 'using ivars' do
+    temporary_model :counter, table_name: nil, base_class: nil do
+      attr_accessor :count
+
+      def initialize              = @count = 0
+      def increment(n = 1, by: 1) = n.times { @count += by }
+      def decrement(n = 1, by: 1) = n.times { @count -= by }
+    end
+
+    # TODO(ezekg) not sure this is possible since you can't redefine an ivar setter
+    it 'should not track transitions' do
+      expect { counter.increment(3) }.to transition { counter.count }.through [0]
+    end
+  end
+
   context 'using methods' do
     temporary_model :counter, table_name: nil, base_class: nil do
       attr_accessor :count
 
-      def initialize       = self.count = 0
-      def increment(n = 1) = n.times { self.count += 1 }
+      def initialize              = self.count = 0
+      def increment(n = 1, by: 1) = n.times { self.count += by }
+      def decrement(n = 1, by: 1) = n.times { self.count += by }
     end
 
     it 'should support single-line expression' do
@@ -67,19 +83,20 @@ RSpec.describe TransitionThrough do
         counter.count -= 2
       }.to transition { counter.count }.through [0, 1, 4, 2]
     end
-  end
 
-  context 'using ivars' do
-    temporary_model :counter, table_name: nil, base_class: nil do
-      attr_accessor :count
+    describe 'README' do
+      it 'should transition through' do
+        counter = Counter.new
+        count   = -> {
+          counter.count = 0
+          counter.increment
+          counter.count  = counter.count + 3
+          counter.count -= 2
+          counter.decrement(by: 2)
+        }
 
-      def initialize       = @count = 0
-      def increment(n = 1) = n.times { @count += 1 }
-    end
-
-    # TODO(ezekg) not sure this is possible since you can't redefine an ivar setter
-    it 'should not track transitions' do
-      expect { counter.increment(3) }.to transition { counter.count }.through [0]
+        expect { count.call }.to transition { counter.count }.through [0, 1, 4, 2, 0]
+      end
     end
   end
 end

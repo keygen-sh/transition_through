@@ -29,7 +29,7 @@ module TransitionThrough
 
       ast.value.accept(exp)
 
-      # raise if the expression is  too complex or empty
+      # raise if the expression is too complex or empty
       raise InvalidExpressionError, 'complex or empty transition expressions are not supported' if
         exp.result.nil? || exp.result.receiver.nil? || exp.result.method_name.nil?
 
