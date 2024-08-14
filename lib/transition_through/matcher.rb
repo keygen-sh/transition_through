@@ -61,11 +61,15 @@ module TransitionThrough
       @actual_states == @expected_states
     end
 
+    # assert state changes across array or range of values
     def through(*values)
       @expected_states = values.flatten(1)
 
-      self
+      self # allow chaining
     end
+
+    # noop because no change is default assertion
+    def nowhere = self
 
     def failure_message
       "expected block to transition through #{@expected_states.inspect} but it transitioned through #{@actual_states.inspect}"

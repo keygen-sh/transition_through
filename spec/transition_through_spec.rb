@@ -75,6 +75,14 @@ RSpec.describe TransitionThrough do
       expect { counter.increment(3) }.to transition { counter.count }.through 0..3
     end
 
+    it 'should support nothing' do
+      expect { }.to transition { counter.count }
+    end
+
+    it 'should support nowhere' do
+      expect { }.to transition { counter.count }.nowhere
+    end
+
     it 'should track transitions' do
       expect {
         counter.count  = 0
