@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors     = ['Zeke Gabrielse']
   spec.email       = ['oss@keygen.sh']
   spec.summary     = 'Assert state changes in sequence. Like change{}, but for asserting multiple changes in RSpec.'
-  spec.description = 'Assert state changes through multiple values for an object, enabling you to test complex state transitions in sequence.'
+  spec.description = 'Assert state changes through multiple values for an object, enabling you to test complex state transitions in sequence with RSpec.'
   spec.homepage    = 'https://github.com/keygen-sh/transition_through'
   spec.license     = 'MIT'
 
