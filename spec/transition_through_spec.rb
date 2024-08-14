@@ -58,6 +58,15 @@ RSpec.describe TransitionThrough do
     it 'should support range' do
       expect { counter.increment(3) }.to transition { counter.count }.through 0..3
     end
+
+    it 'should track transitions' do
+      expect {
+        counter.count  = 0
+        counter.count += 1
+        counter.count  = counter.count + 3
+        counter.count -= 2
+      }.to transition { counter.count }.through [0, 1, 4, 2]
+    end
   end
 
   context 'using ivars' do
