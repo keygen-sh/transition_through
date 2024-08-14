@@ -40,7 +40,12 @@ $ gem install transition_through
 
 ```ruby
 it 'should transition through' do
-  expect { counter.increment(3) }.to transition { counter.count }.through 0..3
+  expect {
+    counter.count  = 0
+    counter.count += 1
+    counter.count  = counter.count + 3
+    counter.count -= 2
+  }.to transition { counter.count }.through [0, 1, 4, 2]
 end
 ```
 
