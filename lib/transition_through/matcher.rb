@@ -19,6 +19,8 @@ module TransitionThrough
 
     def supports_block_expectations? = true
     def matches?(expect_block)
+      raise InvalidExpressionError, 'transition block is required' if state_block.nil?
+
       path, start_line = state_block.source_location
 
       # walk the ast until we find our transition expression
@@ -27,14 +29,14 @@ module TransitionThrough
 
       ast.value.accept(exp)
 
-      # raise if the expression is empty
-      raise InvalidExpressionError if
+      # raise if the expression is  too complex or empty
+      raise InvalidExpressionError, 'complex or empty transition expressions are not supported' if
         exp.result.nil? || exp.result.receiver.nil? || exp.result.method_name.nil?
 
       # get the actual transitioning object from the state block's binding
       receiver = state_block.binding.eval(exp.result.receiver.name.to_s)
 
-      raise InvalidExpressionError unless
+      raise InvalidExpressionError, "expected accessor #{receiver.class}##{exp.result.method_name} but it's missing" unless
         receiver.respond_to?(:"#{exp.result.method_name}=") &&
         receiver.respond_to?(exp.result.method_name)
 
