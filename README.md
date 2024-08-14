@@ -51,6 +51,13 @@ it 'should transition through' do
 
   expect { count.call }.to transition { counter.count }.through [0, 1, 4, 2, 0]
 end
+
+it 'should transition nowhere' do
+  counter = Counter.new
+  count   = -> {}
+
+  expect { count.call }.to transition { counter.count }.nowhere
+end
 ```
 
 ## Supported Rubies
