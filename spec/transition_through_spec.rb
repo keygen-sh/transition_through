@@ -14,9 +14,9 @@ RSpec.describe TransitionThrough do
       def decrement(n = 1, by: 1) = n.times { @count -= by }
     end
 
-    # TODO(ezekg) not sure this is possible since you can't redefine an ivar setter
+    # TODO(ezekg) not sure this is possible since you can't observe an ivar
     it 'should not track transitions' do
-      expect { counter.increment(3) }.to transition { counter.count }.through [0]
+      expect { counter.increment(3) }.to transition { counter.count }.nowhere
     end
   end
 
