@@ -63,7 +63,7 @@ end
 ## Note on instance variables
 
 Currently, mutating state through an instance variable is not supported. This
-due to the fact that instance variables cannot be observed for changes like an
+due is to the fact that instance variables cannot be observed for changes like an
 accessor can. For more information, see [the tests](https://github.com/keygen-sh/transition_through/blob/d2c6b685e4959d08e70bb5012af98fa01fcdebef/spec/transition_through_spec.rb#L8-L21).
 
 If you know of a way to support ivars, please open an issue or PR.
